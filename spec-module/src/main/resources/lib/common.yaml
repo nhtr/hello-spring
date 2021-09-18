@@ -1,0 +1,30 @@
+openapi: 3.0.3
+info:
+  title: OenAPI Common Model
+  description: OenAPI Common Model
+  version: 1.0.0
+
+paths: {}
+
+components:
+  schemas:
+    ApiResult:
+      type: object
+      additionalProperties: false
+      title: ApiResult
+      properties:
+        ok:
+          type: boolean
+        code:
+          type: string
+        message:
+          type: string
+    ApiInvalid:
+      type: object
+      additionalProperties: false
+      title: ApiInvalid
+      properties:
+        code:
+          type: string
+        message:
+          type: string
