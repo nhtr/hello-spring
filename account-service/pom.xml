@@ -14,8 +14,12 @@
     <name>account-service</name>
     <description>Demo project for Spring Boot</description>
     <properties>
-        <java.version>11</java.version>
-        <spring-cloud.version>2020.0.3</spring-cloud.version>
+        <java.version>1.8</java.version>
+        <openapi-generator-version>5.1.0</openapi-generator-version>
+        <spec-module-version>1.0-SNAPSHOT</spec-module-version>
+        <mapstruct.version>1.4.1.Final</mapstruct.version>
+        <lombok.version>1.18.16</lombok.version>
+        <lombok-mapstruct.version>0.2.0</lombok-mapstruct.version>
     </properties>
     <dependencies>
         <dependency>
@@ -25,14 +29,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-security</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
         </dependency>
 
         <dependency>
@@ -55,23 +51,50 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+
         <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-test</artifactId>
-            <scope>test</scope>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.openapitools</groupId>
+            <artifactId>openapi-generator-maven-plugin</artifactId>
+            <version>${openapi-generator-version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-ext</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-simple</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.openapitools</groupId>
+            <artifactId>jackson-databind-nullable</artifactId>
+            <version>0.2.1</version>
+        </dependency>
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger2</artifactId>
+            <version>2.9.2</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-api</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>com.nhtr</groupId>
+            <artifactId>common-module</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>org.springframework.cloud</groupId>
-                <artifactId>spring-cloud-dependencies</artifactId>
-                <version>${spring-cloud.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
 
     <build>
         <plugins>
@@ -85,6 +108,113 @@
                             <artifactId>lombok</artifactId>
                         </exclude>
                     </excludes>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>3.1.1</version>
+                <executions>
+                    <execution>
+                        <id>unpack-spec-module</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>unpack</goal>
+                        </goals>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>com.nhtr</groupId>
+                                    <artifactId>spec-module</artifactId>
+                                    <version>${spec-module-version}</version>
+                                    <outputDirectory>${project.build.directory}/spec-module</outputDirectory>
+                                    <type>jar</type>
+                                    <overWrite>true</overWrite>
+                                </artifactItem>
+                            </artifactItems>
+                            <includes>**/*.yaml, **/*.json</includes>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.openapitools</groupId>
+                <artifactId>openapi-generator-maven-plugin</artifactId>
+                <version>${openapi-generator-version}</version>
+                <executions>
+                    <execution>
+                        <id>generate-client-api-code</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <output>${project.basedir}</output>
+                            <generateSupportingFiles>true</generateSupportingFiles>
+                            <generatorName>spring</generatorName>
+                            <strictSpec>true</strictSpec>
+                            <generateApiTests>false</generateApiTests>
+                            <inputSpec>${project.build.directory}/spec-module/account-api.yaml</inputSpec>
+                            <importMappings>ApiResult=com.nhtr.commonmodule.model.ApiResult</importMappings>
+                            <configOptions>
+                                <libraty>spring-mvc</libraty>
+                                <java8>true</java8>
+                                <dateLibrary>java8</dateLibrary>
+                                <interfaceOnly>true</interfaceOnly>
+                                <skipDefaultInterface>true</skipDefaultInterface>
+                                <useBeanValidation>true</useBeanValidation>
+                                <useClassLevelBeanValidation>false</useClassLevelBeanValidation>
+                                <userTags>true</userTags>
+                                <userOptional>false</userOptional>
+                                <apiPackage>com.nhtr.accountservice.client</apiPackage>
+                                <invokerPackage>com.nhtr.accountservice.client</invokerPackage>
+                                <modelPackage>com.nhtr.accountservice.client.model</modelPackage>
+                                <openApiNullable>true</openApiNullable>
+                                <sourceFolder>src/gen/java</sourceFolder>
+                                <!--suppress UnresolvedMavenProperty -->
+                                <additionalModelTypeAnnotations>@lombok.Builder @lombok.Getter @lombok.Setter @lombok.NoArgsConstructor @lombok.AllArgsConstructor</additionalModelTypeAnnotations>
+                            </configOptions>
+                        </configuration>
+                    </execution>
+
+                    <!-- <execution>
+                        <id>generate-angular-service</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <inputSpec>${project.build.directory}/spec-module/account-api.yaml</inputSpec>
+                            <output>${project.build.directory}/generated-sources/angular</output>
+                            <generatorName>typescript-angular</generatorName>
+                            <templateDirectory>${project.basedir}/templates</templateDirectory>
+                            <configOptions>
+                                <apiModulePrefix>Account</apiModulePrefix>
+                                <configurationPrefix>Account</configurationPrefix>
+                                <serviceSuffix>Service</serviceSuffix>
+                                <providedIn>root</providedIn>
+                                <fileNaming>kebab-case</fileNaming>
+                            </configOptions>
+                        </configuration>
+                    </execution> -->
+                </executions>
+
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.5.1</version>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                            <version>${lombok.version}</version>
+                        </path>
+                    </annotationProcessorPaths>
                 </configuration>
             </plugin>
         </plugins>

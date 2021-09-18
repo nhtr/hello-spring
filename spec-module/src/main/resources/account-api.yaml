@@ -1,0 +1,61 @@
+openapi: 3.0.3
+info:
+  title: Account # dont change this line
+  description: Account Api Docs
+  version: 1.0.0
+servers:
+  - url: 'http://localhost:9091'
+tags:
+  - name: feature
+    description: Feature Tag
+paths:
+  /gateway/account/feature:
+    get:
+      summary: return list feature
+      description: return list feature
+      operationId: getFeatures
+      tags:
+        - feature
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FeatureResponse'
+          description: response Feature List Of User logged in
+
+
+components:
+  schemas:
+    FeatureResponse:
+      type: object
+      title: FeatureResponse
+      additionalProperties: false
+      properties:
+        result:
+          $ref: 'lib/common.yaml#/components/schemas/ApiResult'
+        context:
+          type: array
+          items:
+            $ref: '#/components/schemas/FeatureDto'
+    FeatureDto:
+      type: object
+      title: FeatureDto
+      additionalProperties: false
+      properties:
+        id:
+          type: integer
+          format: int64
+        label:
+          type: string
+        icon:
+          type: string
+        routerLink:
+          type: string
+        hasChildren:
+          type: boolean
+        parent:
+          type: integer
+          format: int64
+        showInMenu:
+          type: boolean
