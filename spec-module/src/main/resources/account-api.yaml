@@ -4,12 +4,12 @@ info:
   description: Account Api Docs
   version: 1.0.0
 servers:
-  - url: 'http://localhost:9091'
+  - url: 'http://localhost:9091/account-service'
 tags:
   - name: feature
     description: Feature Tag
 paths:
-  /gateway/account/feature:
+  /api/feature:
     get:
       summary: return list feature
       description: return list feature

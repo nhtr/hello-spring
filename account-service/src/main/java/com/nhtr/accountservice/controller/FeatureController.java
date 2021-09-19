@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping(value = "feature")
+@RequestMapping(value = "api/feature")
 public class FeatureController {
 
     private final FeatureService featureService;
