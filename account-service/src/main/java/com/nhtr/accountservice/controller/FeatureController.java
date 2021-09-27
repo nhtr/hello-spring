@@ -1,22 +1,28 @@
 package com.nhtr.accountservice.controller;
 
+import com.nhtr.accountservice.client.FeatureApi;
 import com.nhtr.accountservice.client.model.FeatureResponse;
+import com.nhtr.accountservice.client.model.MenuResponse;
 import com.nhtr.accountservice.service.FeatureService;
+import com.nhtr.accountservice.service.GroupMenuService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping(value = "api/feature")
-public class FeatureController {
+public class FeatureController implements FeatureApi {
 
     private final FeatureService featureService;
+    private final GroupMenuService groupMenuService;
 
-    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public FeatureResponse menu() {
-        return featureService.getFeatures();
+    @Override
+    public ResponseEntity<FeatureResponse> getFeatures() {
+        return ResponseEntity.ok().body(featureService.getFeatures());
+    }
+
+    @Override
+    public ResponseEntity<MenuResponse> getMenu() {
+        return ResponseEntity.ok().body(groupMenuService.getMenu());
     }
 }

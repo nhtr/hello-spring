@@ -156,11 +156,15 @@
                             <strictSpec>true</strictSpec>
                             <generateApiTests>false</generateApiTests>
                             <inputSpec>${project.build.directory}/spec-module/account-api.yaml</inputSpec>
-                            <importMappings>ApiResult=com.nhtr.commonmodule.model.ApiResult</importMappings>
+                            <importMappings>
+                                <importMapping>ApiResult=com.nhtr.commonmodule.model.ApiResult</importMapping>
+                                <importMapping>Feature=com.nhtr.accountservice.entity.Feature</importMapping>
+                                <importMapping>GroupMenu=com.nhtr.accountservice.entity.GroupMenu</importMapping>
+                            </importMappings>
                             <configOptions>
                                 <libraty>spring-mvc</libraty>
                                 <java8>true</java8>
-                                <dateLibrary>java8</dateLibrary>
+                                <dateLibrary>joda</dateLibrary>
                                 <interfaceOnly>true</interfaceOnly>
                                 <skipDefaultInterface>true</skipDefaultInterface>
                                 <useBeanValidation>true</useBeanValidation>
@@ -172,13 +176,14 @@
                                 <modelPackage>com.nhtr.accountservice.client.model</modelPackage>
                                 <openApiNullable>true</openApiNullable>
                                 <sourceFolder>src/gen/java</sourceFolder>
+                                <useTags>true</useTags>
                                 <!--suppress UnresolvedMavenProperty -->
                                 <additionalModelTypeAnnotations>@lombok.Builder @lombok.Getter @lombok.Setter @lombok.NoArgsConstructor @lombok.AllArgsConstructor</additionalModelTypeAnnotations>
                             </configOptions>
                         </configuration>
                     </execution>
 
-                    <execution>
+                    <!-- <execution>
                         <id>generate-angular-service</id>
                         <phase>generate-resources</phase>
                         <goals>
@@ -197,7 +202,7 @@
                                 <fileNaming>kebab-case</fileNaming>
                             </configOptions>
                         </configuration>
-                    </execution>
+                    </execution> -->
                 </executions>
 
             </plugin>
