@@ -1,13 +1,26 @@
 # A Demo Project
 
-# Start
+# Start Account Service
 - Go to common-module run command: `mvn clean install`
 - Go to spec-module run command: `mvn clean install`
+- Environment variables:
+  - SPRING_DATASOURCE_DRIVER_CLASS_NAME: mysql
+  - SPRING_DATASOURCE_URL: mysql
+  - SPRING_DATASOURCE_USERNAME: mysql username
+  - SPRING_DATASOURCE_PASSWORD: mysql password
+  - KEYCLOAK_URL: keycloak url
+  - KEYCLOAK_REALM: keycloak realm id
+  - KEYCLOAK_USERNAME: not use in this version
+  - KEYCLOAK_PASSWORD: not use in this version
+  - KEYCLOAK_CLIENT_ID: keycloak
+  - KEYCLOAK_CLIENT_SECRET: keycloak
+  - KEYCLOAK_ID_WEB_ADMIN: keycloak id of client web admin not client-id
 - Go to account-service run command: `mvn clean compile`
-  - Add folder account-service/src/gen/java to Generated Source Root
+  - Add folder `account-service/target/generated-sources/api/src/main/java` to Generated Source Root
 - Run account-service
-- Test: Run GET request to [feature service](http://localhost:9091/account-service/api/feature)
-
-# Integration with [client](https://github.com/nhtr/hello-spring-client/tree/demo-open-api)
-- Copy files in folder account-service/target/generated-sources/angular to [client data generated](https://github.com/nhtr/hello-spring-client/tree/demo-open-api/libs/data-generated/src/lib/account)
-- Run client from [the repository](https://github.com/nhtr/hello-spring-client/tree/demo-open-api) with command to view result: `npm start`
+# Start Gateway Service
+- Environment variables:
+  - AUTH_ISSUER_URI
+  - AUTH_JWK_URI
+  - AUTH_ALGORITHM
+- Run gateway-service

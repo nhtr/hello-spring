@@ -1,5 +1,0 @@
-src/gen/java/com/nhtr/accountservice/client/ApiUtil.java
-src/gen/java/com/nhtr/accountservice/client/FeatureApi.java
-src/gen/java/com/nhtr/accountservice/client/model/FeatureDto.java
-src/gen/java/com/nhtr/accountservice/client/model/FeatureResponse.java
-src/gen/java/com/nhtr/accountservice/client/model/MenuResponse.java

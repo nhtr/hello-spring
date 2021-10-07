@@ -20,12 +20,36 @@
         <mapstruct.version>1.4.1.Final</mapstruct.version>
         <lombok.version>1.18.16</lombok.version>
         <lombok-mapstruct.version>0.2.0</lombok-mapstruct.version>
+        <keycloak.version>12.0.4</keycloak.version>
+        <spring-cloud.version>2020.0.2</spring-cloud.version>
     </properties>
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>javax.ws.rs</groupId>
+                    <artifactId>jsr311-api</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-webflux</artifactId>
+        </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
@@ -89,12 +113,52 @@
             </exclusions>
         </dependency>
         <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok-mapstruct-binding</artifactId>
+            <version>${lombok-mapstruct.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct</artifactId>
+            <version>${mapstruct.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct-processor</artifactId>
+            <version>${mapstruct.version}</version>
+        </dependency>
+        <dependency>
             <groupId>com.nhtr</groupId>
             <artifactId>common-module</artifactId>
             <version>1.0-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
+
+        <dependency>
+            <groupId>org.keycloak</groupId>
+            <artifactId>keycloak-admin-client</artifactId>
+            <version>${keycloak.version}</version>
+        </dependency>
     </dependencies>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.keycloak.bom</groupId>
+                <artifactId>keycloak-adapter-bom</artifactId>
+                <version>${keycloak.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring-cloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <build>
         <plugins>
@@ -150,7 +214,7 @@
                             <goal>generate</goal>
                         </goals>
                         <configuration>
-                            <output>${project.basedir}</output>
+                            <output>${project.build.directory}/generated-sources/api</output>
                             <generateSupportingFiles>true</generateSupportingFiles>
                             <generatorName>spring</generatorName>
                             <strictSpec>true</strictSpec>
@@ -158,8 +222,6 @@
                             <inputSpec>${project.build.directory}/spec-module/account-api.yaml</inputSpec>
                             <importMappings>
                                 <importMapping>ApiResult=com.nhtr.commonmodule.model.ApiResult</importMapping>
-                                <importMapping>Feature=com.nhtr.accountservice.entity.Feature</importMapping>
-                                <importMapping>GroupMenu=com.nhtr.accountservice.entity.GroupMenu</importMapping>
                             </importMappings>
                             <configOptions>
                                 <libraty>spring-mvc</libraty>
@@ -175,7 +237,6 @@
                                 <invokerPackage>com.nhtr.accountservice.client</invokerPackage>
                                 <modelPackage>com.nhtr.accountservice.client.model</modelPackage>
                                 <openApiNullable>true</openApiNullable>
-                                <sourceFolder>src/gen/java</sourceFolder>
                                 <useTags>true</useTags>
                                 <!--suppress UnresolvedMavenProperty -->
                                 <additionalModelTypeAnnotations>@lombok.Builder @lombok.Getter @lombok.Setter @lombok.NoArgsConstructor @lombok.AllArgsConstructor</additionalModelTypeAnnotations>
@@ -218,6 +279,16 @@
                             <groupId>org.projectlombok</groupId>
                             <artifactId>lombok</artifactId>
                             <version>${lombok.version}</version>
+                        </path>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok-mapstruct-binding</artifactId>
+                            <version>${lombok-mapstruct.version}</version>
+                        </path>
+                        <path>
+                            <groupId>org.mapstruct</groupId>
+                            <artifactId>mapstruct-processor</artifactId>
+                            <version>${mapstruct.version}</version>
                         </path>
                     </annotationProcessorPaths>
                 </configuration>

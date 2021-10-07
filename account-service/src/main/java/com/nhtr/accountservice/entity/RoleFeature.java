@@ -1,15 +1,27 @@
 package com.nhtr.accountservice.entity;
 
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
 import java.io.Serializable;
-import java.util.Objects;
 import java.util.UUID;
 
+@Getter
+@Setter
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@NoArgsConstructor
 @Entity
 @IdClass(value = RoleFeatureId.class)
+@EntityListeners(AuditingEntityListener.class)
 public class RoleFeature implements Serializable {
 
     @Id
@@ -20,51 +32,24 @@ public class RoleFeature implements Serializable {
     @Column(name = "feature_id")
     private Long featureId;
 
+    @EqualsAndHashCode.Include
     @Column(unique = true, nullable = false, updatable = false)
     private String uuid = UUID.randomUUID().toString();
 
-    public RoleFeature() {
-    }
+    @Embedded
+    private AuditingData auditingData = new AuditingData();
+
 
     public RoleFeature(String roleId, Long featureId) {
         this.roleId = roleId;
         this.featureId = featureId;
     }
 
-    public String getRoleId() {
-        return roleId;
-    }
-
-    public void setRoleId(String roleId) {
-        this.roleId = roleId;
-    }
-
-    public Long getFeatureId() {
-        return featureId;
-    }
-
-    public void setFeatureId(Long featureId) {
-        this.featureId = featureId;
-    }
-
-    public String getUuid() {
-        return uuid;
-    }
-
-    public void setUuid(String uuid) {
-        this.uuid = uuid;
-    }
-
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        RoleFeature that = (RoleFeature) o;
-        return Objects.equals(uuid, that.uuid);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(uuid);
+    public String toString() {
+        return "RoleFeature{" +
+                "roleId='" + roleId + '\'' +
+                ", featureId=" + featureId +
+                '}';
     }
 }

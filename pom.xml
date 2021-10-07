@@ -11,6 +11,8 @@
     <modules>
         <module>common-module</module>
         <module>spec-module</module>
+        <module>account-service</module>
+        <module>gateway-service</module>
     </modules>
 
     <properties>

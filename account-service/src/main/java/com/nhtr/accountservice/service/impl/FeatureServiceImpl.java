@@ -17,7 +17,7 @@ public class FeatureServiceImpl implements FeatureService {
     public FeatureResponse getFeatures() {
         FeatureResponse response = new FeatureResponse();
         response.setResult(ApiResult.OK);
-        response.setContext(featureRepository.loadAll());
+        response.setContext(featureRepository.findAllAndMapToDto());
         return response;
     }
 }

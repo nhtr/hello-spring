@@ -1,13 +1,19 @@
 package com.nhtr.accountservice.controller;
 
 import com.nhtr.accountservice.client.FeatureApi;
-import com.nhtr.accountservice.client.model.FeatureResponse;
-import com.nhtr.accountservice.client.model.MenuResponse;
+
+import com.nhtr.accountservice.entity.GroupMenu;
 import com.nhtr.accountservice.service.FeatureService;
 import com.nhtr.accountservice.service.GroupMenuService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.nhtr.accountservice.client.model.FeatureResponse;
+import com.nhtr.accountservice.client.model.MenuResponse;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 @RestController

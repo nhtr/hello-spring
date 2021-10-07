@@ -28,9 +28,9 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: http://localhost:8095/auth/realms/prm
-          jwk-set-uri: http://localhost:8095/auth/realms/prm/protocol/openid-connect/certs
-          jws-algorithm: RS256
+          issuer-uri: ${AUTH_ISSUER_URI}
+          jwk-set-uri: ${AUTH_JWK_URI}
+          jws-algorithm: ${AUTH_ALGORITHM}
   cloud:
     gateway:
       routes:
@@ -39,4 +39,4 @@ spring:
           predicates:
             - Path=/gateway/account/**
           filters:
-            - RewritePath=/gateway/account/(?<segment>.*), /account-service/api/$\{segment}
+            - RewritePath=/gateway/account/(?<segment>.*), /account-service/$\{segment}
