@@ -1,0 +1,27 @@
+server:
+  port: 8095
+spring:
+  datasource:
+    driver-class-name: ${SPRING_DATASOURCE_DRIVER_CLASS_NAME}
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: none
+    show-sql: false
+keycloak:
+  custom:
+    server:
+      context-path: "/auth"
+
+    infinispan:
+      config-location: "classpath:infinispan-cluster.xml"
+
+    adminUser:
+      username: admin
+      password: admin
+    import-location: hello-spring-realm.json
+    create-admin-user: false
+    create-realm: false

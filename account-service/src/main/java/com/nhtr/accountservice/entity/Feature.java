@@ -44,7 +44,7 @@ public class Feature implements Serializable {
 
     private Integer orderValue;
 
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "group_id")
     private GroupMenu groupMenu;
 

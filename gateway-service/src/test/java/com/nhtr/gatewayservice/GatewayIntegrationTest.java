@@ -54,7 +54,7 @@ public class GatewayIntegrationTest {
         this.webTestClient.mutateWith(mockJwt().jwt(jwt -> jwt.claim("scope", "read write custom")
                 .subject("customSubjectId")))
                 .get()
-                .uri(BASE_GATEWAY_URL_PATH + "/account/users")
+                .uri(BASE_GATEWAY_URL_PATH + "/account/api/users")
                 .exchange()
                 .expectStatus()
                 .isOk()

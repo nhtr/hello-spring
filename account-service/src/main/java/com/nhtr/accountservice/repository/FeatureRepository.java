@@ -11,6 +11,7 @@ import java.util.List;
 public interface FeatureRepository extends JpaRepository<Feature, Long> {
 
     List<FeatureDto> findAllAndMapToDto();
-    List<FeatureDto> findByRolesAndGroupMenu(@Param("roles") String[] roles, @Param("groupMenuId") Long groupMenuId);
-    List<FeatureDto> findFeatureByGroupNullAndRoles(@Param("roles") String[] roles);
+
+    @EntityGraph(attributePaths = {"groupMenu"})
+    List<Feature> findByRoles(@Param("roles") String[] roles);
 }

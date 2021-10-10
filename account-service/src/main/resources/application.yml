@@ -17,9 +17,6 @@ spring:
     enabled: false
     check-template-location: false
   datasource:
-    # url: jdbc:h2:mem:testdb
-    # username: sa
-    # password:
     driver-class-name: ${SPRING_DATASOURCE_DRIVER_CLASS_NAME}
     url: ${SPRING_DATASOURCE_URL}
     username: ${SPRING_DATASOURCE_USERNAME}
@@ -27,7 +24,7 @@ spring:
   jpa:
     open-in-view: false
     hibernate:
-      ddl-auto: none
+      ddl-auto: update
     defer-datasource-initialization: true
     show-sql: true
 keycloak:
