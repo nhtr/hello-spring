@@ -1,5 +1,13 @@
 # A Demo Project
 
+# Start Authorization Server (Keycloak)
+- Option 1: Run authorization-service embedded in project with Environment variables:
+  - SPRING_DATASOURCE_DRIVER_CLASS_NAME: mysql
+  - SPRING_DATASOURCE_URL: mysql
+  - SPRING_DATASOURCE_USERNAME: mysql username
+  - SPRING_DATASOURCE_PASSWORD: mysql password
+- Option 2: Install and Setup follow [document](https://www.keycloak.org/)
+
 # Start Account Service
 - Go to common-module run command: `mvn clean install`
 - Go to spec-module run command: `mvn clean install`
