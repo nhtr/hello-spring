@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.keycloak.admin.client.Keycloak;
 import org.keycloak.representations.idm.RoleRepresentation;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.stream.Collectors;
 
@@ -26,6 +27,7 @@ public class FeatureServiceImpl implements FeatureService {
     private final FeatureGroupDtoMapper featureGroupDtoMapper;
 
     @Override
+    @Transactional(readOnly = true)
     public FeatureResponse getFeatures() {
         FeatureResponse response = new FeatureResponse();
         response.setResult(ApiResult.OK);
@@ -34,6 +36,7 @@ public class FeatureServiceImpl implements FeatureService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public MenuResponse getMenu() {
         MenuResponse response = new MenuResponse();
         response.setResult(ApiResult.OK);
