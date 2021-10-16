@@ -5,6 +5,9 @@
   - MYSQL_DATASOURCE_URL: mysql
   - MYSQL_DATASOURCE_USERNAME: mysql username
   - MYSQL_DATASOURCE_PASSWORD: mysql password
+  - open browner with url to config auth: `http://localhost:8095/auth/`
+    - username: admin
+    - password: admin
 - Option 2: Install and Setup follow [document](https://www.keycloak.org/)
 
 # Start Account Service
