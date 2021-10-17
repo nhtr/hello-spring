@@ -2,6 +2,7 @@ package com.nhtr.accountservice.controller;
 
 import com.nhtr.accountservice.client.FeatureApi;
 
+import com.nhtr.accountservice.client.model.MenuTransformedResponse;
 import com.nhtr.accountservice.service.FeatureService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -24,5 +25,10 @@ public class FeatureController implements FeatureApi {
     @Override
     public ResponseEntity<MenuResponse> getMenu() {
         return ResponseEntity.ok(featureService.getMenu());
+    }
+
+    @Override
+    public ResponseEntity<MenuTransformedResponse> getMenuTransformed() {
+        return ResponseEntity.ok().body(featureService.getMenuTransformed());
     }
 }
