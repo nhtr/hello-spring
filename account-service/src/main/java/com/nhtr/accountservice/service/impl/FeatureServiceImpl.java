@@ -1,6 +1,7 @@
 package com.nhtr.accountservice.service.impl;
 
 import com.nhtr.accountservice.client.model.FeatureDto;
+import com.nhtr.accountservice.client.model.FeaturePageResponse;
 import com.nhtr.accountservice.client.model.FeatureResponse;
 import com.nhtr.accountservice.client.model.GroupMenuFeatureDto;
 import com.nhtr.accountservice.client.model.MenuResponse;
@@ -19,6 +20,7 @@ import org.keycloak.representations.idm.RoleRepresentation;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.Tuple;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -41,7 +43,7 @@ public class FeatureServiceImpl implements FeatureService {
     public FeatureResponse getFeatures() {
         FeatureResponse response = new FeatureResponse();
         response.setResult(ApiResult.OK);
-        response.setContext(featureRepository.findAllAndMapToDto());
+        response.setContext(featureRepository.findAllDto());
         return response;
     }
 
@@ -74,25 +76,26 @@ public class FeatureServiceImpl implements FeatureService {
         return response;
     }
 
-    private MenuTransformedResponseContext transform(List<Object[]> rs) {
+    private MenuTransformedResponseContext transform(List<Tuple> rs) {
         MenuTransformedResponseContext context = new MenuTransformedResponseContext();
         final Map<Long, GroupMenuFeatureDto> groupMenuFeatureDtoMap = new HashMap<>();
         List<FeatureDto> standaloneFeatureList = new ArrayList<>();
-        for (Object[] o : rs) {
-            if (o[0] == null) {
-                standaloneFeatureList.add(objToFeature(o));
+        for (Tuple tuple : rs) {
+            Object gIdObj = tuple.get("gId");
+            if (gIdObj == null) {
+                standaloneFeatureList.add(objToFeature(tuple));
             } else {
-                Long gId = ((Number) o[0]).longValue();
+                Long gId = ((Number) gIdObj).longValue();
                 GroupMenuFeatureDto groupMenuFeatureDto = groupMenuFeatureDtoMap.get(gId);
                 if (groupMenuFeatureDto == null) {
                     groupMenuFeatureDto = GroupMenuFeatureDto.builder()
                             .id(gId)
-                            .label((String) o[1])
-                            .icon((String) o[2])
-                            .orderValue((Integer) o[3])
+                            .label((String) tuple.get("gLabel"))
+                            .icon((String) tuple.get("gIcon"))
+                            .orderValue((Integer) tuple.get("gOrderValue"))
                             .build();
                 }
-                groupMenuFeatureDto.addFeaturesItem(objToFeature(o));
+                groupMenuFeatureDto.addFeaturesItem(objToFeature(tuple));
                 groupMenuFeatureDtoMap.putIfAbsent(groupMenuFeatureDto.getId(), groupMenuFeatureDto);
             }
         }
@@ -101,16 +104,37 @@ public class FeatureServiceImpl implements FeatureService {
         return context;
     }
 
-    private FeatureDto objToFeature(Object[] o) {
+    private FeatureDto objToFeature(Tuple tuple) {
+
         return FeatureDto.builder()
-                .id((Long) o[4])
-                .label((String) o[5])
-                .icon((String) o[6])
-                .routerLink((String) o[7])
-                .hasChildren((Boolean) o[8])
-                .parent((Long) o[9])
-                .showInMenu((Boolean) o[10])
-                .orderValue((Integer) o[11])
+                .id(tuple.get("id") == null ? null : ((Number) tuple.get("id")).longValue())
+                .label((String) tuple.get("label"))
+                .icon((String) tuple.get("icon"))
+                .routerLink((String) tuple.get("routerLink"))
+                .hasChildren((Boolean) tuple.get("hasChildren"))
+                .parent(tuple.get("parent") == null ? null : ((Number) tuple.get("parent")).longValue())
+                .showInMenu((Boolean) tuple.get("showInMenu"))
+                .orderValue((Integer) tuple.get("orderValue"))
                 .build();
+    }
+
+    @Override
+    public FeaturePageResponse getFeaturePaging(Long id, Integer limit) {
+        FeaturePageResponse response = new FeaturePageResponse();
+        response.setResult(ApiResult.OK);
+        if (id == null || limit == null) {
+            response.setResult(ApiResult.BAD);
+        } else {
+            List<FeatureDto> featureDtos = featureRepository.fetchWithKeysetPagination(id, limit + 1);
+            if (featureDtos.size() == (limit + 1)) {
+                featureDtos.remove(featureDtos.size() - 1);
+                response.setContext(featureDtos);
+                response.setLast(false);
+            } else {
+                response.setContext(featureDtos);
+                response.setLast(true);
+            }
+        }
+        return response;
     }
 }

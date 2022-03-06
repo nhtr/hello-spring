@@ -10,12 +10,6 @@ eureka:
 spring:
   application:
     name: account-service
-  h2:
-    console:
-      enabled: true
-  mustache:
-    enabled: false
-    check-template-location: false
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: ${MYSQL_DATASOURCE_URL}

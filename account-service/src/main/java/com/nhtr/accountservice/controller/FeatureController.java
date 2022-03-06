@@ -2,6 +2,7 @@ package com.nhtr.accountservice.controller;
 
 import com.nhtr.accountservice.client.FeatureApi;
 
+import com.nhtr.accountservice.client.model.FeaturePageResponse;
 import com.nhtr.accountservice.client.model.MenuTransformedResponse;
 import com.nhtr.accountservice.service.FeatureService;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +17,11 @@ import com.nhtr.accountservice.client.model.MenuResponse;
 public class FeatureController implements FeatureApi {
 
     private final FeatureService featureService;
+
+    @Override
+    public ResponseEntity<FeaturePageResponse> getFeatureWithPage(Long id, Integer limit) {
+        return ResponseEntity.ok().body(featureService.getFeaturePaging(id, limit));
+    }
 
     @Override
     public ResponseEntity<FeatureResponse> getFeatures() {

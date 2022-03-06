@@ -5,6 +5,7 @@
   - MYSQL_DATASOURCE_URL: mysql
   - MYSQL_DATASOURCE_USERNAME: mysql username
   - MYSQL_DATASOURCE_PASSWORD: mysql password
+  - Set `create-admin-user` and `create-realm` to true in first run
   - Open browner with url to config auth: [admin page](http://localhost:8095/auth/)
     - username: admin
     - password: admin

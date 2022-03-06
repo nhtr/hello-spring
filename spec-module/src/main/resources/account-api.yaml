@@ -51,7 +51,34 @@ paths:
               schema:
                 $ref: '#/components/schemas/MenuTransformedResponse'
           description: response Menu to user loggedIn and maintain structure
-
+  /api/feature/page/{id}/{limit}:
+    get:
+      summary: return features with paging
+      description: return features with paging
+      operationId: getFeatureWithPage
+      tags:
+        - feature
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+            format: int64
+          required: true
+          description: id of last feature in list response
+        - in: path
+          name: limit
+          schema:
+            type: integer
+          required: true
+          description: limit item
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FeaturePageResponse'
+          description: response Features and pagination
 components:
   schemas:
     FeatureResponse:
@@ -175,3 +202,16 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/FeatureDto'
+    FeaturePageResponse:
+      type: object
+      title: FeaturePageResponse
+      additionalProperties: false
+      properties:
+        result:
+          $ref: 'lib/common.yaml#/components/schemas/ApiResult'
+        context:
+          type: array
+          items:
+            $ref: '#/components/schemas/FeatureDto'
+        last:
+          type: boolean
