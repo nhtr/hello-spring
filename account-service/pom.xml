@@ -239,7 +239,7 @@
                         </configuration>
                     </execution>
 
-                    <!-- <execution>
+                    <execution>
                         <id>generate-angular-service</id>
                         <phase>generate-resources</phase>
                         <goals>
@@ -258,7 +258,7 @@
                                 <fileNaming>kebab-case</fileNaming>
                             </configOptions>
                         </configuration>
-                    </execution> -->
+                    </execution>
                 </executions>
 
             </plugin>

@@ -8,6 +8,8 @@ servers:
 tags:
   - name: feature
     description: Feature Tag
+  - name: profile
+    description: User Profile
 paths:
   /api/feature/list:
     get:
@@ -79,6 +81,42 @@ paths:
               schema:
                 $ref: '#/components/schemas/FeaturePageResponse'
           description: response Features and pagination
+  /api/profile:
+    get:
+      summary: return user profile
+      description: return user profile,
+      operationId: getUserProfile,
+      tags:
+        - profile
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfileResponse'
+          description: response Profile of user logged in
+  /api/profile/logout:
+    post:
+      summary: user logout
+      description: interact user logout
+      operationId: postUserLogout
+      tags:
+        - profile
+      requestBody:
+        description: logout request body
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LogoutRequest'
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LogoutResponse'
+          description: response user logout
+
 components:
   schemas:
     FeatureResponse:
@@ -215,3 +253,45 @@ components:
             $ref: '#/components/schemas/FeatureDto'
         last:
           type: boolean
+    UserProfile:
+      type: object
+      title: UserProfile
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        username:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        avatar:
+          type: string
+      required:
+        - id
+    UserProfileResponse:
+      type: object
+      title: UserProfileResponse
+      additionalProperties: false
+      properties:
+        result:
+          $ref: 'lib/common.yaml#/components/schemas/ApiResult'
+        context:
+          $ref: '#/components/schemas/UserProfile'
+    LogoutRequest:
+      type: object
+      title: LogoutRequest
+      additionalProperties: false
+      properties:
+        username:
+          type: string
+      required:
+        - username
+    LogoutResponse:
+      type: object
+      title: LogoutResponse
+      additionalProperties: false
+      properties:
+        result:
+          $ref: 'lib/common.yaml#/components/schemas/ApiResult'
