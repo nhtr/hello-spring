@@ -28,3 +28,12 @@ components:
           type: string
         message:
           type: string
+    BadRequestResponse:
+      type: object
+      title: BadRequestResponse
+      additionalProperties: false
+      properties:
+        result:
+          $ref: '#/components/schemas/ApiResult'
+        invalidMessage:
+          $ref: '#/components/schemas/ApiInvalid'

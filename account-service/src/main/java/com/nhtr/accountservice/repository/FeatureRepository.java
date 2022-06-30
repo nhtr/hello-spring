@@ -20,4 +20,11 @@ public interface FeatureRepository extends JpaRepository<Feature, Long>, Feature
             " where rf.roleId in :roles")
     @EntityGraph(attributePaths = {"groupMenu"})
     List<Feature> findByRoles(@Param("roles") String[] roles);
+
+    @Query(value = "select new com.nhtr.accountservice.client.model.FeatureDto(" +
+            " f.id, f.label, f.icon, f.routerLink, f.hasChildren, f.parent, f.showInMenu, f.orderValue) from Feature f" +
+            " join RoleFeature rf on f.id = rf.featureId" +
+            " where rf.roleId = :role")
+    // @EntityGraph(attributePaths = {"groupMenu"})
+    List<FeatureDto> findByRole(@Param("role") String role);
 }

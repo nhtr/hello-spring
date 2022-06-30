@@ -43,7 +43,8 @@ public class ProfileServiceImpl implements ProfileService {
     public LogoutResponse logout(LogoutRequest request) {
         LogoutResponse response = new LogoutResponse();
         response.setResult(ApiResult.OK);
-        // required add user-management account service role in keycloak
+        // required add manage-users at clientRoles - realmManagement
+        // navigate to clients-client name-account service roles in keycloak
         keycloak.realm(keycloakProperties.getRealm())
                 .users().get(request.getUsername()).logout();
         return response;

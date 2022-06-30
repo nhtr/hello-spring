@@ -8,6 +8,10 @@ servers:
 tags:
   - name: feature
     description: Feature Tag
+  - name: profile
+    description: User Profile
+  - name: role
+    description: Role Management
 paths:
   /api/feature/list:
     get:
@@ -79,6 +83,138 @@ paths:
               schema:
                 $ref: '#/components/schemas/FeaturePageResponse'
           description: response Features and pagination
+  /api/feature/by-role/{roleId}:
+    get:
+      summary: return feature list by role id
+      description: returen feature list
+      operationId: getFeatureByRole
+      tags:
+        - feature
+      parameters:
+        - in: path
+          name: roleId
+          schema:
+            type: string
+            description: id of role
+          required: true
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FeatureResponse'
+          description: Feature list response
+  /api/profile:
+    get:
+      summary: return user profile
+      description: return user profile,
+      operationId: getUserProfile,
+      tags:
+        - profile
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfileResponse'
+          description: response Profile of user logged in
+  /api/profile/logout:
+    post:
+      summary: user logout
+      description: interact user logout
+      operationId: postUserLogout
+      tags:
+        - profile
+      requestBody:
+        description: logout request body
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LogoutRequest'
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LogoutResponse'
+          description: response user logout
+  /api/roles:
+    get:
+      summary: return list role
+      description: return list role
+      operationId: getRoles
+      tags:
+        - role
+#      parameters:
+#        - in: path
+#          name: clientId
+#          schema:
+#            type: string
+#          description: id of client not client-id
+#          required: true
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RoleResponse'
+          description: response Role list
+    post:
+      summary: save role feature
+      description: save role feature
+      operationId: postSaveRoleFeature
+      tags:
+        - role
+#      parameters:
+#        - in: path
+#          name: clientId
+#          schema:
+#            type: string
+#          description: id of client not client-id
+#          required: true
+      requestBody:
+        required: true
+        description: save role feature request body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SaveRoleFeatureRequest'
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SaveRoleFeatureResponse'
+          description: response save role feature
+  /api/roles/by-feature/{featureId}:
+    get:
+      summary: return list role
+      description: return list role
+      operationId: getRolesByFeature
+      tags:
+        - role
+      parameters:
+#        - in: path
+#          name: clientId
+#          schema:
+#            type: string
+#            description: id of client not client-id
+#          required: true
+        - in: path
+          name: featureId
+          schema:
+            type: integer
+            format: int64
+            description: id of feature
+          required: true
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RoleResponse'
+          description: response Role list
 components:
   schemas:
     FeatureResponse:
@@ -215,3 +351,87 @@ components:
             $ref: '#/components/schemas/FeatureDto'
         last:
           type: boolean
+    UserProfile:
+      type: object
+      title: UserProfile
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        username:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        avatar:
+          type: string
+      required:
+        - id
+    UserProfileResponse:
+      type: object
+      title: UserProfileResponse
+      additionalProperties: false
+      properties:
+        result:
+          $ref: 'lib/common.yaml#/components/schemas/ApiResult'
+        context:
+          $ref: '#/components/schemas/UserProfile'
+    LogoutRequest:
+      type: object
+      title: LogoutRequest
+      additionalProperties: false
+      properties:
+        username:
+          type: string
+      required:
+        - username
+    LogoutResponse:
+      type: object
+      title: LogoutResponse
+      additionalProperties: false
+      properties:
+        result:
+          $ref: 'lib/common.yaml#/components/schemas/ApiResult'
+    RoleDto:
+      type: object
+      title: RoleDto
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        clientRole:
+          type: boolean
+        name:
+          type: string
+        description:
+          type: string
+    RoleResponse:
+      type: object
+      title: FeatureResponse
+      additionalProperties: false
+      properties:
+        result:
+          $ref: 'lib/common.yaml#/components/schemas/ApiResult'
+        context:
+          type: array
+          items:
+            $ref: '#/components/schemas/RoleDto'
+    SaveRoleFeatureRequest:
+      type: object
+      title: SaveRoleFeatureRequest
+      additionalProperties: false
+      properties:
+        role:
+          $ref: '#/components/schemas/RoleDto'
+        features:
+          type: array
+          items:
+            $ref: '#/components/schemas/FeatureDto'
+    SaveRoleFeatureResponse:
+      type: object
+      title: SaveRoleFeatureResponse
+      additionalProperties: false
+      properties:
+        result:
+          $ref: 'lib/common.yaml#/components/schemas/ApiResult'

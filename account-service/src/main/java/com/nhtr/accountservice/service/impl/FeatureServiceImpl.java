@@ -137,4 +137,12 @@ public class FeatureServiceImpl implements FeatureService {
         }
         return response;
     }
+
+    @Override
+    public FeatureResponse getFeaturesByRole(String roleId) {
+        FeatureResponse response = new FeatureResponse();
+        response.setResult(ApiResult.OK);
+        response.setContext(featureRepository.findByRole(roleId));
+        return response;
+    }
 }

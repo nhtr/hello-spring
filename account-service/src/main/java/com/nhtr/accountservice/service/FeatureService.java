@@ -11,4 +11,5 @@ public interface FeatureService {
     MenuResponse getMenu();
     MenuTransformedResponse getMenuTransformed();
     FeaturePageResponse getFeaturePaging(Long id, Integer limit);
+    FeatureResponse getFeaturesByRole(String roleId);
 }

@@ -19,6 +19,11 @@ public class FeatureController implements FeatureApi {
     private final FeatureService featureService;
 
     @Override
+    public ResponseEntity<FeatureResponse> getFeatureByRole(String roleId) {
+        return ResponseEntity.ok().body(featureService.getFeaturesByRole(roleId));
+    }
+
+    @Override
     public ResponseEntity<FeaturePageResponse> getFeatureWithPage(Long id, Integer limit) {
         return ResponseEntity.ok().body(featureService.getFeaturePaging(id, limit));
     }
